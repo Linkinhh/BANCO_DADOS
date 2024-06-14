@@ -1,31 +1,32 @@
-from tkinter import *
 import oracledb
-import getpass
-import tkinter
+import sys
+import PyQt5.QtWidgets as qtw
+from PyQt5.QtWidgets import QApplication
+from login.loginPage import Ui_Form as login
 
-# ---------------------------
-connection = oracledb.connect(user="a15390310", password="a15390310", dsn="orclgrad1.icmc.usp.br/pdb_elaine.icmc.usp.br", port=1521)
-print("Feita a conexao.")
+# Supongamos que la dirección IP del servidor es 123.456.789.10
+ip_address = "143.107.183.216"
+service_name = "pdb_elaine.icmc.usp.br"
 
-cursor = connection.cursor()
-cursor.execute("select * from SISTEMA")
-result = cursor.fetchall()
+# Creando el pool de sesiones con la dirección IP
+pool = oracledb.SessionPool(user="a15390310", password="a15390310",
+                            dsn=f"{ip_address}/{service_name}",
+                            min=1, max=1, increment=1, encoding="UTF-8")
 
-# ---------------------------
+# Adquiriendo una conexión del pool
+connection = pool.acquire()
 
-root = tkinter.Tk()
-root.title("BANCO DE DADOS")
-root.config(background="white")
+print("Feita a conexão.")
 
-pushLoginInterface(root)
+app = QApplication(sys.argv)
+window = qtw.QWidget()
+ui = login()
+ui.setupUi(window)
+window.show()
+sys.exit(app.exec_())
 
-left_frame = Frame(root, width=400, height=400)
-left_frame.grid(row=1, column=1, padx=0, pady=5)
+# Liberando la conexión de vuelta al pool
+pool.release(connection)
 
-contador = 0
-for i in result:
-    textinho = str(i)
-    Label(left_frame, text=textinho).grid(row=contador, column=0, padx=5, pady=5)
-    contador += 1    
-
-root.mainloop()
+# Cerrando el pool de sesiones
+pool.close()

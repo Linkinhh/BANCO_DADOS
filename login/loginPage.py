@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -79,7 +78,7 @@ class Ui_Form(object):
         self.label_8.setText(_translate("Form", "LOGIN"))
         self.pushButton.setText(_translate("Form", "FAZER LOGIN"))
 
-
+"""
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -88,3 +87,4 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
+"""
