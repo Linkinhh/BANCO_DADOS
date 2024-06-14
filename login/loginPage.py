@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(500, 500)
+        Form.resize(500, 600)
         self.frame = QtWidgets.QFrame(Form)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 500, 500))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 500, 600))
         self.frame.setStyleSheet("background-color: rgb(1, 0, 5);")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -50,6 +50,20 @@ class Ui_Form(object):
         self.label_8.setStyleSheet("color: rgb(255, 255, 255);\n"
 "font: 75 32pt \"Ubuntu\";")
         self.label_8.setObjectName("label_8")
+        self.pushButton = QtWidgets.QPushButton(self.frame)
+        self.pushButton.setGeometry(QtCore.QRect(160, 530, 181, 31))
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu")
+        font.setPointSize(18)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(6)
+        self.pushButton.setFont(font)
+        self.pushButton.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.pushButton.setAutoFillBackground(False)
+        self.pushButton.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 50 18pt \"Ubuntu\";")
+        self.pushButton.setObjectName("pushButton")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -58,11 +72,12 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "LOGIN"))
         self.frame.setWhatsThis(_translate("Form", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
-        self.plainTextEdit_3.setPlaceholderText(_translate("Form", "Digite o seu CPF"))
+        self.plainTextEdit_3.setPlaceholderText(_translate("Form", "Digite seu CPF"))
         self.label_5.setText(_translate("Form", "CPF"))
         self.plainTextEdit_4.setPlaceholderText(_translate("Form", "Digite sua senha"))
         self.label_6.setText(_translate("Form", "SENHA"))
         self.label_8.setText(_translate("Form", "LOGIN"))
+        self.pushButton.setText(_translate("Form", "FAZER LOGIN"))
 
 
 if __name__ == "__main__":
