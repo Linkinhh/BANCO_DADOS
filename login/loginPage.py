@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -20,19 +21,11 @@ class Ui_Form(object):
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        self.plainTextEdit_3 = QtWidgets.QPlainTextEdit(self.frame)
-        self.plainTextEdit_3.setGeometry(QtCore.QRect(190, 380, 211, 31))
-        self.plainTextEdit_3.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.plainTextEdit_3.setObjectName("plainTextEdit_3")
         self.label_5 = QtWidgets.QLabel(self.frame)
         self.label_5.setGeometry(QtCore.QRect(90, 380, 51, 21))
         self.label_5.setStyleSheet("color: rgb(255, 255, 255);\n"
 "font: 75 20pt \"Ubuntu\";")
         self.label_5.setObjectName("label_5")
-        self.plainTextEdit_4 = QtWidgets.QPlainTextEdit(self.frame)
-        self.plainTextEdit_4.setGeometry(QtCore.QRect(190, 430, 211, 31))
-        self.plainTextEdit_4.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.plainTextEdit_4.setObjectName("plainTextEdit_4")
         self.label_6 = QtWidgets.QLabel(self.frame)
         self.label_6.setGeometry(QtCore.QRect(90, 430, 81, 21))
         self.label_6.setStyleSheet("color: rgb(255, 255, 255);\n"
@@ -63,28 +56,27 @@ class Ui_Form(object):
         self.pushButton.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 50 18pt \"Ubuntu\";")
         self.pushButton.setObjectName("pushButton")
+        self.senha_text_box = QtWidgets.QLineEdit(self.frame)
+        self.senha_text_box.setGeometry(QtCore.QRect(190, 430, 211, 31))
+        self.senha_text_box.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.senha_text_box.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.senha_text_box.setObjectName("senha_text_box")
+        self.CPI_text_box = QtWidgets.QLineEdit(self.frame)
+        self.CPI_text_box.setGeometry(QtCore.QRect(190, 380, 211, 31))
+        self.CPI_text_box.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.CPI_text_box.setEchoMode(QtWidgets.QLineEdit.Normal)
+        self.CPI_text_box.setObjectName("CPI_text_box")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "LOGIN"))
+        Form.setWindowTitle(_translate("Form", "Login"))
         self.frame.setWhatsThis(_translate("Form", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
-        self.plainTextEdit_3.setPlaceholderText(_translate("Form", "Digite seu CPF"))
-        self.label_5.setText(_translate("Form", "CPF"))
-        self.plainTextEdit_4.setPlaceholderText(_translate("Form", "Digite sua senha"))
+        self.label_5.setText(_translate("Form", "CPI"))
         self.label_6.setText(_translate("Form", "SENHA"))
         self.label_8.setText(_translate("Form", "LOGIN"))
         self.pushButton.setText(_translate("Form", "FAZER LOGIN"))
-
-"""
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Form = QtWidgets.QWidget()
-    ui = Ui_Form()
-    ui.setupUi(Form)
-    Form.show()
-    sys.exit(app.exec_())
-"""
+        self.senha_text_box.setPlaceholderText(_translate("Form", "Digite sua senha"))
+        self.CPI_text_box.setPlaceholderText(_translate("Form", "Digite seu CPI"))

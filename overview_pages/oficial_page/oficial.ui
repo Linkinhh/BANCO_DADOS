@@ -29,7 +29,7 @@
     <attribute name="title">
      <string>NOME_DO_CARGO</string>
     </attribute>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="panelLiderFaccao">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -39,9 +39,9 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="tab_7">
+     <widget class="QWidget" name="tabAlterarNome">
       <attribute name="title">
        <string>Alterar nome Facção</string>
       </attribute>
@@ -58,17 +58,7 @@
         <string>Novo nome da Facção</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
-       <property name="geometry">
-        <rect>
-         <x>490</x>
-         <y>50</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="buttonAlterarNome">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -81,21 +71,21 @@
         <string>ENVIAR</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QWidget" name="tab_8">
-      <attribute name="title">
-       <string>Indicar novo líder</string>
-      </attribute>
-      <widget class="QPlainTextEdit" name="plainTextEdit_3">
+      <widget class="QLineEdit" name="textAlterarNome">
        <property name="geometry">
         <rect>
-         <x>470</x>
+         <x>490</x>
          <y>50</y>
          <width>261</width>
          <height>31</height>
         </rect>
        </property>
       </widget>
+     </widget>
+     <widget class="QWidget" name="tabNovoLider">
+      <attribute name="title">
+       <string>Indicar novo líder</string>
+      </attribute>
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
@@ -109,7 +99,7 @@
         <string>Novo CPI do Líder</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="buttonNovoLider">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -122,8 +112,18 @@
         <string>ENVIAR</string>
        </property>
       </widget>
+      <widget class="QLineEdit" name="textNovoLider">
+       <property name="geometry">
+        <rect>
+         <x>470</x>
+         <y>50</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
-     <widget class="QWidget" name="tab_9">
+     <widget class="QWidget" name="tabCredenciaComunidade">
       <attribute name="title">
        <string>Credenciar comunidades novas</string>
       </attribute>
@@ -140,26 +140,6 @@
         <string>Nome da Comunidade</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_12">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>50</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_13">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>10</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_13">
        <property name="geometry">
         <rect>
@@ -171,16 +151,6 @@
        </property>
        <property name="text">
         <string>Especia da Comunidade</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_14">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>90</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_14">
@@ -196,7 +166,7 @@
         <string>Quantidade de habitantes</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="buttonCredenciarComunidade">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -222,7 +192,37 @@
         <string>Planeta que habita comunidade</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_15">
+      <widget class="QLineEdit" name="textEspecieComunidade">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>10</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNomeComunidade">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>50</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textQuantidadeComunidade">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>90</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textPlanetaComunidade">
        <property name="geometry">
         <rect>
          <x>720</x>
@@ -233,11 +233,11 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="tab_10">
+     <widget class="QWidget" name="tabRemoverFaccao">
       <attribute name="title">
        <string>Remover Facção de Nacção</string>
       </attribute>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="buttonRemoverFaccao">
        <property name="geometry">
         <rect>
          <x>430</x>
@@ -251,6 +251,27 @@
        </property>
       </widget>
      </widget>
+     <widget class="QWidget" name="tabNaoLider">
+      <attribute name="title">
+       <string/>
+      </attribute>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>50</y>
+         <width>291</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 18pt &quot;Ubuntu&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Voce não é líder de Facção</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
@@ -258,13 +279,13 @@
        <x>30</x>
        <y>150</y>
        <width>201</width>
-       <height>161</height>
+       <height>141</height>
       </rect>
      </property>
      <property name="title">
       <string>Pesquisar</string>
      </property>
-     <widget class="QRadioButton" name="radioButton_15">
+     <widget class="QRadioButton" name="radioButtonFaccao">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -277,7 +298,7 @@
        <string>Facções</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_16">
+     <widget class="QRadioButton" name="radioButtonLider">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -290,7 +311,7 @@
        <string>Líderes</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_17">
+     <widget class="QRadioButton" name="radioButtonComunidade">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -303,7 +324,7 @@
        <string>Comunidades</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_18">
+     <widget class="QRadioButton" name="radioButtonNacao">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -316,24 +337,11 @@
        <string>Nações</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_19">
+     <widget class="QRadioButton" name="radioButtonHabitacao">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>110</y>
-        <width>112</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Comunidades</string>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="radioButton_20">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>130</y>
         <width>112</width>
         <height>23</height>
        </rect>
@@ -356,17 +364,36 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>830</x>
+       <x>780</x>
        <y>10</y>
-       <width>191</width>
+       <width>241</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 18pt &quot;Ubuntu&quot;;</string>
      </property>
      <property name="text">
       <string>Bem-vindo, USER</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="contador">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>300</y>
+       <width>191</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;Ubuntu&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>

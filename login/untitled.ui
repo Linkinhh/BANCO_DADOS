@@ -34,22 +34,6 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QPlainTextEdit" name="plainTextEdit_3">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>380</y>
-      <width>211</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="plainText">
-     <string>Zod</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
@@ -64,23 +48,7 @@
 font: 75 20pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>CPF</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_4">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>430</y>
-      <width>211</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="plainText">
-     <string>Papu+na</string>
+     <string>CPI</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
@@ -166,6 +134,44 @@ font: 50 18pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
      <string>FAZER LOGIN</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="senha_text_box">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>430</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+    <property name="placeholderText">
+     <string>Digite sua senha</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="CPI_text_box">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>380</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Normal</enum>
+    </property>
+    <property name="placeholderText">
+     <string>Digite seu CPI</string>
     </property>
    </widget>
   </widget>

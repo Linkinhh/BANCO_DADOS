@@ -1,0 +1,71 @@
+import oracledb
+import sys
+import PyQt5.QtWidgets as qtw
+from PyQt5.QtWidgets import QApplication
+from login.loginPage import Ui_Form as login
+from overview_pages.cientista_page.cientistaPage import Ui_Form as cientista
+from overview_pages.comandante_page.comandantePage import Ui_Form as comandante
+from overview_pages.oficial_page.oficialPage import Ui_Form as oficial
+from window import Window
+from DataBaseConection import DataBaseConnection
+
+def verificar_usuario(loginWindow, oficialWindow, cientistaWindow, comandanteWindow):
+
+    try:
+        typeObject = connection.connection.gettype("LIDER_INFO")
+        cursor = connection.connection.cursor()
+        #result = cursor.callfunc("verificar_usuario", asd, [loginWindow.ui.CPI_text_box.text(), loginWindow.ui.senha_text_box.text()])
+
+        result = cursor.callfunc("verificar_usuario", typeObject, ["111.222.393-44", "Papu+na"])
+        print(result.CARGO)
+        if result.CARGO == "OFICIAL   ":
+            loginWindow.close()
+            oficialWindow.show()
+        
+        if result.CARGO == "CIENTISTA ":
+            loginWindow.close()
+            cientistaWindow.show()
+
+        if result.CARGO == "COMANDANTE":
+            loginWindow.close()
+            comandanteWindow.show()   
+        #print(f'Login exitoso\nCPI: {result.CPI}\nNome: {result.NOME}\nCargo: {result.CARGO}\nNacao: {result.NACAO}\nEspecie: {result.ESPECIE}\nEh Lider Faccao: {result.EH_LIDER_FACCAO}')
+
+    except oracledb.Error as e:
+        errorObject,=e.args
+        if errorObject.code == 20001:
+            loginWindow.popupMessage("Usuário não encontrado.")
+        if errorObject.code == 20002:
+            loginWindow.popupMessage("Senha incorreta.")
+        if errorObject.code == 20003:
+            loginWindow.popupMessage("Líder não encontrado")
+        if errorObject.code == 20004:
+            loginWindow.popupMessage("Error desconocido: error code ORA-20004")
+
+connection = DataBaseConnection()
+
+# Fazer conexão
+connection.established_connection()
+
+app = QApplication(sys.argv)
+
+login = Window(login())
+login.initialize()
+login.show()
+
+oficialPage = Window(oficial())
+oficialPage.initialize()
+cientistaPage = Window(cientista())
+cientistaPage.initialize()
+comandantePage = Window(comandante())
+comandantePage.initialize()
+
+login.ui.pushButton.clicked.connect(lambda: verificar_usuario(login, oficialPage, cientistaPage, comandantePage))
+sys.exit(app.exec_())
+
+# Encerrar a conexão
+connection.close_connection()
+
+# 111.222.393-44 OFICIAL
+# 123.456.789-00 COMANDANTE
+# 555.666.797-88 CIENTISTA

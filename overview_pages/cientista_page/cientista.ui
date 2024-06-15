@@ -39,7 +39,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
@@ -58,17 +58,7 @@
         <string>Novo nome da Facção</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
-       <property name="geometry">
-        <rect>
-         <x>490</x>
-         <y>50</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="buttonAlterarNome">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -81,21 +71,21 @@
         <string>ENVIAR</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QWidget" name="tab_8">
-      <attribute name="title">
-       <string>Indicar novo líder</string>
-      </attribute>
-      <widget class="QPlainTextEdit" name="plainTextEdit_3">
+      <widget class="QLineEdit" name="textAlterarNome">
        <property name="geometry">
         <rect>
-         <x>470</x>
+         <x>490</x>
          <y>50</y>
          <width>261</width>
          <height>31</height>
         </rect>
        </property>
       </widget>
+     </widget>
+     <widget class="QWidget" name="tab_8">
+      <attribute name="title">
+       <string>Indicar novo líder</string>
+      </attribute>
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
@@ -109,7 +99,7 @@
         <string>Novo CPI do Líder</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="buttonNovoLider">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -120,6 +110,16 @@
        </property>
        <property name="text">
         <string>ENVIAR</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNovoLider">
+       <property name="geometry">
+        <rect>
+         <x>470</x>
+         <y>50</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
        </property>
       </widget>
      </widget>
@@ -140,26 +140,6 @@
         <string>Nome da Comunidade</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_12">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>50</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_13">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>10</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_13">
        <property name="geometry">
         <rect>
@@ -171,16 +151,6 @@
        </property>
        <property name="text">
         <string>Especia da Comunidade</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_14">
-       <property name="geometry">
-        <rect>
-         <x>200</x>
-         <y>90</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_14">
@@ -196,7 +166,7 @@
         <string>Quantidade de habitantes</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="buttonCredenciarComunidade">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -222,11 +192,41 @@
         <string>Planeta que habita comunidade</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_15">
+      <widget class="QLineEdit" name="textEspecieComunidade">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>10</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textQuantidadeComunidade">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>90</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textPlanetaComunidade">
        <property name="geometry">
         <rect>
          <x>720</x>
          <y>10</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNomeComunidade">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>50</y>
          <width>261</width>
          <height>31</height>
         </rect>
@@ -237,7 +237,7 @@
       <attribute name="title">
        <string>Remover Facção de Nacção</string>
       </attribute>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="buttonRemoverFaccao">
        <property name="geometry">
         <rect>
          <x>430</x>
@@ -248,6 +248,27 @@
        </property>
        <property name="text">
         <string>REMOVER FACÇÃO</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tabNaoLider">
+      <attribute name="title">
+       <string/>
+      </attribute>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>50</y>
+         <width>291</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 18pt &quot;Ubuntu&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Voce não é líder de Facção</string>
        </property>
       </widget>
      </widget>
@@ -264,7 +285,7 @@
      <property name="title">
       <string>Pesquisar</string>
      </property>
-     <widget class="QRadioButton" name="radioButton_15">
+     <widget class="QRadioButton" name="radioButtonEstrelas">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -277,7 +298,7 @@
        <string>Estrelas</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_16">
+     <widget class="QRadioButton" name="radioButtonPlanetas">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -290,7 +311,7 @@
        <string>Planetas</string>
       </property>
      </widget>
-     <widget class="QRadioButton" name="radioButton_17">
+     <widget class="QRadioButton" name="radioButtonSistemas">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -317,9 +338,9 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>830</x>
+       <x>720</x>
        <y>0</y>
-       <width>191</width>
+       <width>301</width>
        <height>31</height>
       </rect>
      </property>
@@ -340,13 +361,13 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_21">
       <attribute name="title">
        <string>Inserir estrela</string>
       </attribute>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="buttonInserirEstrela">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -357,16 +378,6 @@
        </property>
        <property name="text">
         <string>ENVIAR</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_5">
-       <property name="geometry">
-        <rect>
-         <x>180</x>
-         <y>10</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_10">
@@ -382,16 +393,6 @@
         <string>ID da nova estrela</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_11">
-       <property name="geometry">
-        <rect>
-         <x>180</x>
-         <y>50</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_16">
        <property name="geometry">
         <rect>
@@ -403,26 +404,6 @@
        </property>
        <property name="text">
         <string>Nome da nova estrela</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_23">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>50</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_24">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>10</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_24">
@@ -464,16 +445,6 @@
         <string>Coordenadas X</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_25">
-       <property name="geometry">
-        <rect>
-         <x>690</x>
-         <y>10</y>
-         <width>81</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_27">
        <property name="geometry">
         <rect>
@@ -485,16 +456,6 @@
        </property>
        <property name="text">
         <string>Coordenadas Y</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_26">
-       <property name="geometry">
-        <rect>
-         <x>690</x>
-         <y>50</y>
-         <width>81</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_28">
@@ -510,7 +471,67 @@
         <string>Coordenadas Z</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_27">
+      <widget class="QLineEdit" name="textIDEstrela">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>10</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNomeEstrela">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textClassificacaoEstrela">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>10</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textMassaEstrela">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textCoordY">
+       <property name="geometry">
+        <rect>
+         <x>690</x>
+         <y>50</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textCoordX">
+       <property name="geometry">
+        <rect>
+         <x>690</x>
+         <y>10</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textCoordZ">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -525,16 +546,6 @@
       <attribute name="title">
        <string>Pesquisar estrela</string>
       </attribute>
-      <widget class="QPlainTextEdit" name="plainTextEdit_10">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>10</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
@@ -548,7 +559,7 @@
         <string>ID da estrela</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="buttonPesquisarEstrela">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -561,6 +572,55 @@
         <string>PESQUISAR</string>
        </property>
       </widget>
+      <widget class="QLineEdit" name="textPesquisarEstrela">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>10</y>
+         <width>231</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_19">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>91</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Resultado</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="textResultadoPesquisa">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>50</y>
+         <width>561</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="textResultadoPesquisa_2">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>70</y>
+         <width>561</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_27">
       <attribute name="title">
@@ -569,7 +629,7 @@
       <widget class="QLabel" name="label_29">
        <property name="geometry">
         <rect>
-         <x>570</x>
+         <x>550</x>
          <y>20</y>
          <width>111</width>
          <height>17</height>
@@ -579,30 +639,10 @@
         <string>Coordenadas X</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_28">
-       <property name="geometry">
-        <rect>
-         <x>130</x>
-         <y>50</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_29">
-       <property name="geometry">
-        <rect>
-         <x>410</x>
-         <y>50</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_30">
        <property name="geometry">
         <rect>
-         <x>800</x>
+         <x>780</x>
          <y>20</y>
          <width>111</width>
          <height>17</height>
@@ -615,7 +655,7 @@
       <widget class="QLabel" name="label_31">
        <property name="geometry">
         <rect>
-         <x>310</x>
+         <x>290</x>
          <y>60</y>
          <width>51</width>
          <height>17</height>
@@ -625,27 +665,7 @@
         <string>Massa</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_30">
-       <property name="geometry">
-        <rect>
-         <x>680</x>
-         <y>50</y>
-         <width>81</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_31">
-       <property name="geometry">
-        <rect>
-         <x>130</x>
-         <y>10</y>
-         <width>141</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_13">
+      <widget class="QPushButton" name="buttonAtualizarEstrela">
        <property name="geometry">
         <rect>
          <x>910</x>
@@ -656,26 +676,6 @@
        </property>
        <property name="text">
         <string>ENVIAR</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_32">
-       <property name="geometry">
-        <rect>
-         <x>680</x>
-         <y>10</y>
-         <width>81</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_33">
-       <property name="geometry">
-        <rect>
-         <x>910</x>
-         <y>10</y>
-         <width>91</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_32">
@@ -707,7 +707,7 @@
       <widget class="QLabel" name="label_34">
        <property name="geometry">
         <rect>
-         <x>310</x>
+         <x>290</x>
          <y>20</y>
          <width>91</width>
          <height>17</height>
@@ -720,7 +720,7 @@
       <widget class="QLabel" name="label_35">
        <property name="geometry">
         <rect>
-         <x>570</x>
+         <x>550</x>
          <y>60</y>
          <width>111</width>
          <height>17</height>
@@ -730,12 +730,72 @@
         <string>Coordenadas Y</string>
        </property>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_34">
+      <widget class="QLineEdit" name="textMassaEstrelaAtuailizar">
        <property name="geometry">
         <rect>
-         <x>410</x>
+         <x>390</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textCoordYAtuailizar">
+       <property name="geometry">
+        <rect>
+         <x>670</x>
+         <y>50</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textIDEstrelaAtualizar">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
          <y>10</y>
          <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNomeEstrelaAtualizar">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textClassificacaoEstrelaAtualizar">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>10</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textCoordZAtuailizar">
+       <property name="geometry">
+        <rect>
+         <x>910</x>
+         <y>10</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textCoordXAtuailizar">
+       <property name="geometry">
+        <rect>
+         <x>670</x>
+         <y>10</y>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
@@ -745,16 +805,6 @@
       <attribute name="title">
        <string>Excluir estrela</string>
       </attribute>
-      <widget class="QPlainTextEdit" name="plainTextEdit_17">
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>10</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_17">
        <property name="geometry">
         <rect>
@@ -804,7 +854,7 @@
         <string>ENVIAR</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_8">
+      <widget class="QPushButton" name="buttonExcluirEstrela">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -817,7 +867,33 @@
         <string>EXCLUIR</string>
        </property>
       </widget>
+      <widget class="QLineEdit" name="textExcluirEstrela">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>10</y>
+         <width>231</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
+    </widget>
+    <widget class="QLabel" name="contador">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>260</y>
+       <width>191</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;Ubuntu&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_6">
