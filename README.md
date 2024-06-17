@@ -20,6 +20,8 @@ Aplicação com conexão a banco de dados - disciplina de SCC0241 - Laboratório
 ```bash
     python -m pip install oracledb --upgrade --user
     
+    ou pode usar
+
     python3 -m pip install oracledb --upgrade --user
 ```
 
