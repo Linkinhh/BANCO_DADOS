@@ -84,7 +84,7 @@ class App:
             # oficial 987.654.391-00
             # cientista 555.444.393-22
             # comandante 444.333.292-11
-            self.usuario = cursor.callfunc("verificar_usuario", typeObject, ["555.444.393-22", "Papu+na"])
+            self.usuario = cursor.callfunc("verificar_usuario", typeObject, [self.Ventanas[self.VentanasIndex.LOGIN.value].ui.CPI_text_box.text(), self.Ventanas[self.VentanasIndex.LOGIN.value].ui.senha_text_box.text()])
             
             self.Ventanas[self.VentanasIndex.LOGIN.value].close()
 

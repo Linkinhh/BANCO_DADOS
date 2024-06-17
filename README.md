@@ -25,6 +25,11 @@ Aplicação com conexão a banco de dados - disciplina de SCC0241 - Laboratório
     python3 -m pip install oracledb --upgrade --user
 ```
 
+# Rodar
+
+1. Descargar os requisitos e o projeto
+2. Rodar o arquivo Main.py
+
 ## Desenvolvedores
 
 Feito por:
