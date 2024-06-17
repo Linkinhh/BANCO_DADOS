@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>COMANDANTE</string>
   </property>
   <widget class="QTabWidget" name="oficialTab">
    <property name="geometry">
@@ -29,7 +29,7 @@
     <attribute name="title">
      <string>NOME_DO_CARGO</string>
     </attribute>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="panelLiderFaccao">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -367,7 +367,7 @@
       <attribute name="title">
        <string>Incluir/excluir nação</string>
       </attribute>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="buttonIncluirExcluirNacao">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -378,16 +378,6 @@
        </property>
        <property name="text">
         <string>ENVIAR</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_5">
-       <property name="geometry">
-        <rect>
-         <x>160</x>
-         <y>10</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_10">
@@ -403,7 +393,7 @@
         <string>Nome da federação</string>
        </property>
       </widget>
-      <widget class="QRadioButton" name="radioButton_27">
+      <widget class="QRadioButton" name="radioButtonIncluir">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -416,7 +406,7 @@
         <string>Incluir</string>
        </property>
       </widget>
-      <widget class="QRadioButton" name="radioButton_28">
+      <widget class="QRadioButton" name="radioButtonExcluir">
        <property name="geometry">
         <rect>
          <x>350</x>
@@ -429,21 +419,21 @@
         <string>Excluir</string>
        </property>
       </widget>
-     </widget>
-     <widget class="QWidget" name="tab_22">
-      <attribute name="title">
-       <string>Criar nova federação</string>
-      </attribute>
-      <widget class="QPlainTextEdit" name="plainTextEdit_10">
+      <widget class="QLineEdit" name="textNomeFederacao">
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>160</x>
          <y>10</y>
          <width>261</width>
          <height>31</height>
         </rect>
        </property>
       </widget>
+     </widget>
+     <widget class="QWidget" name="tab_22">
+      <attribute name="title">
+       <string>Criar nova federação</string>
+      </attribute>
       <widget class="QLabel" name="label_11">
        <property name="geometry">
         <rect>
@@ -457,20 +447,7 @@
         <string>Nome da nova federação</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_20">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>60</y>
-         <width>121</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Data de fundação</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="buttonCriarFederacao">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -483,13 +460,13 @@
         <string>ENVIAR</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit_3">
+      <widget class="QLineEdit" name="textCriarNomeFederacao">
        <property name="geometry">
         <rect>
          <x>190</x>
-         <y>50</y>
-         <width>110</width>
-         <height>26</height>
+         <y>10</y>
+         <width>261</width>
+         <height>31</height>
         </rect>
        </property>
       </widget>
@@ -509,16 +486,6 @@
        </property>
        <property name="text">
         <string>Data de inicio</string>
-       </property>
-      </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit_17">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>10</y>
-         <width>261</width>
-         <height>31</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_17">
@@ -583,7 +550,7 @@
         <string>Data de fim</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_8">
+      <widget class="QPushButton" name="buttonInserirDominancia">
        <property name="geometry">
         <rect>
          <x>920</x>
@@ -596,7 +563,7 @@
         <string>ENVIAR</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit">
+      <widget class="QDateEdit" name="dateEditDataInicioDominancia">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -605,14 +572,54 @@
          <height>26</height>
         </rect>
        </property>
+       <property name="minimumDateTime">
+        <datetime>
+         <hour>0</hour>
+         <minute>0</minute>
+         <second>0</second>
+         <year>1752</year>
+         <month>9</month>
+         <day>14</day>
+        </datetime>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="date">
+        <date>
+         <year>2024</year>
+         <month>1</month>
+         <day>1</day>
+        </date>
+       </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit_2">
+      <widget class="QDateEdit" name="dateEditDataFimDominancia">
        <property name="geometry">
         <rect>
-         <x>520</x>
+         <x>510</x>
          <y>10</y>
          <width>110</width>
          <height>26</height>
+        </rect>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="date">
+        <date>
+         <year>2024</year>
+         <month>1</month>
+         <day>1</day>
+        </date>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNomePlanetaDominancia">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>10</y>
+         <width>261</width>
+         <height>31</height>
         </rect>
        </property>
       </widget>
@@ -639,6 +646,198 @@
     <attribute name="title">
      <string>RELATÓRIOS</string>
     </attribute>
+    <widget class="QTableWidget" name="tableRelatorio">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>180</y>
+       <width>1021</width>
+       <height>591</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidgetRelatorio">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>1021</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab_24">
+      <attribute name="title">
+       <string>Comandante</string>
+      </attribute>
+      <widget class="QPushButton" name="buttonIncluirExcluirNacao_2">
+       <property name="geometry">
+        <rect>
+         <x>920</x>
+         <y>50</y>
+         <width>89</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ENVIAR</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_20">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>141</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Nome da federação</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonIncluir_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>112</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Incluir</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonExcluir_2">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>50</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Excluir</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textNomeFederacao_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>10</y>
+         <width>261</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_25">
+      <attribute name="title">
+       <string>Lider de Facção</string>
+      </attribute>
+      <widget class="QPushButton" name="buttonGerarLider">
+       <property name="geometry">
+        <rect>
+         <x>920</x>
+         <y>60</y>
+         <width>89</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>GERAR</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioEspecie">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>60</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Especie</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioNacao">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>112</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Nação</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>281</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 18pt &quot;Ubuntu&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Gerar relatório seguindo:</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioPlaneta">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>60</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Planeta</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioSistema">
+       <property name="geometry">
+        <rect>
+         <x>620</x>
+         <y>60</y>
+         <width>81</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Sistema</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="contadorRelatorio">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>780</y>
+       <width>191</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;Ubuntu&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>

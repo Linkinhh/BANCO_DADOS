@@ -1,10 +1,10 @@
-# TODO : Secciones 
-# TODO : Corregir quinta tabla del panel de lider de faccao
-# TODO : Excepciones en credenciar
-# TODO : 
+# TODO : (PRIORIEDAD) Corregir quinta tabla del panel de lider de faccao
+
 import sys
 import oracledb
 import PyQt5.QtWidgets as qtw
+import PyQt5.QtGui as qtg
+from datetime import date, datetime
 from DataBaseConection import DataBaseConnection
 from enum import Enum
 from window import Window
@@ -26,10 +26,12 @@ class App:
         cientistaWindow = Window(cientista())
         comandanteWindow = Window(comandante())
         oficialWindow = Window(oficial())
-        self.usuario = "placeholder"
+        self.usuario = None
+        self.relatorio = None
         self.VentanasIndex = WindowsEnum
         self.Ventanas = [loginWindow, oficialWindow, cientistaWindow, comandanteWindow]
         self.__inicializarLogin()
+        self.fecha = None
         
         
     def showWindow(self, ventana):        
@@ -43,6 +45,12 @@ class App:
         self.connection = DataBaseConnection()
         self.connection.established_connection()
     
+    def adicionarLogs(self, message):
+
+        cursor = self.connection.connection.cursor()
+
+        cursor.callproc("log_message" ,[self.usuario.CPI, message])
+
     def __inicializarLogin(self):
         self.Ventanas[self.VentanasIndex.LOGIN.value].ui.pushButton.clicked.connect(lambda: self.__verificarUsuario())
 
@@ -72,60 +80,51 @@ class App:
         try:
             typeObject = self.connection.connection.gettype("LIDER_INFO")
             cursor = self.connection.connection.cursor()
-            #result = cursor.callfunc("verificar_usuario", asd, [loginWindow.ui.CPI_text_box.text(), loginWindow.ui.senha_text_box.text()])
-
-            # 111.222.393-44 OFICIAL
-            # 123.456.789-00 COMANDANTE
-            # 555.666.797-88 CIENTISTA
-
-            """
-            set serveroutput on;
-            -- Actualización del líder de la facção
-            BEGIN
-                pacoteLiderf.actualizar_lider_por_cpi('333.444.555-66', '987.654.321-00');
-            END;
-            /
-
-            -- Intento de actualización con un líder actual no existente
-            BEGIN
-                pacoteLiderf.actualizar_lider_por_cpi('000.000.000-00', '987.654.321-00');
-            END;
-            /
-
-            -- Intento de actualización con un nuevo líder no existente
-            BEGIN
-                pacoteLiderf.actualizar_lider_por_cpi('222.333.444-55', '000.000.000-00');
-            END;
-            """
-
+            
+            # oficial 987.654.391-00
+            # cientista 555.444.393-22
+            # comandante 444.333.292-11
             self.usuario = cursor.callfunc("verificar_usuario", typeObject, ["555.444.393-22", "Papu+na"])
             
             self.Ventanas[self.VentanasIndex.LOGIN.value].close()
 
             if self.usuario.CARGO == "OFICIAL   ":
-                self.__inicializarOficial()   
+                
+                self.__inicializarOficial()
+                self.__inicializarRelatorioOficial(self.VentanasIndex.OFICIAL.value)   
+                self.inicializarRelatorioLiderFaccao(self.VentanasIndex.OFICIAL.value)
                 self.Ventanas[self.VentanasIndex.OFICIAL.value].show()
                 self.funcionalidadLiderFaccao(self.VentanasIndex.OFICIAL.value)
+                
+
                 if(self.usuario.EH_LIDER_FACCAO == 'N'):
                     self.hideIfNotLider(self.VentanasIndex.OFICIAL.value)
+                else:
+                    self.Ventanas[self.VentanasIndex.OFICIAL.value].ui.panelLiderFaccao.setTabEnabled(4,False)
             
             if self.usuario.CARGO == "CIENTISTA ":
                 self.__inicializarCientista()
+                self.__inicializarRelatorioCientista(self.VentanasIndex.CIENTISTA.value)
+                self.inicializarRelatorioLiderFaccao(self.VentanasIndex.CIENTISTA.value)
                 self.Ventanas[self.VentanasIndex.CIENTISTA.value].show()
                 self.funcionalidadCientista(self.VentanasIndex.CIENTISTA.value)
                 self.funcionalidadLiderFaccao(self.VentanasIndex.CIENTISTA.value)
                 if(self.usuario.EH_LIDER_FACCAO == 'N'):
                     self.hideIfNotLider(self.VentanasIndex.CIENTISTA.value)
+                else:
+                    self.Ventanas[self.VentanasIndex.CIENTISTA.value].ui.panelLiderFaccao.setTabEnabled(4,False)
 
             if self.usuario.CARGO == "COMANDANTE":
-                self.__inicializarComandante() 
+                self.__inicializarComandante()
+                self.inicializarRelatorioLiderFaccao(self.VentanasIndex.COMANDANTE.value)
                 self.Ventanas[self.VentanasIndex.COMANDANTE.value].show()
+                self.funcionalidadComandante(self.VentanasIndex.COMANDANTE.value)
                 self.funcionalidadLiderFaccao(self.VentanasIndex.COMANDANTE.value)
                 if(self.usuario.EH_LIDER_FACCAO == 'N'):
                     self.hideIfNotLider(self.VentanasIndex.COMANDANTE.value)
+                else:
+                    self.Ventanas[self.VentanasIndex.COMANDANTE.value].ui.panelLiderFaccao.setTabEnabled(4,False)
 
-            #print(f'Login exitoso\nCPI: {self.usuario.CPI}\nNome: {self.usuario.NOME}\nCargo: {self.usuario.CARGO}\nNacao: {self.usuario.NACAO}\nEspecie: {self.usuario.ESPECIE}\nEh Lider Faccao: {self.usuario.EH_LIDER_FACCAO}')
-        
         except oracledb.Error as e:
             errorObject,=e.args
             if errorObject.code == 20001:
@@ -135,14 +134,18 @@ class App:
             if errorObject.code == 20003:
                 self.Ventanas[self.VentanasIndex.LOGIN].popupMessage("Líder não encontrado")
             if errorObject.code == 20004:
-                self.Ventanas[self.VentanasIndex.LOGIN].popupMessage("Error desconocido: error code ORA-20004")  
-        
+                self.Ventanas[self.VentanasIndex.LOGIN].popupMessage("Erro não conhecido: error code ORA-20004")
+        self.adicionarLogs("Inicio sessão")
 # ---------------------------------
     
     def query_filter(self, nombre, currentWindow):
         
         cursor = self.connection.connection.cursor()
         consulta = "SELECT * FROM " + nombre
+
+        # Obtener los nombres de las columnas
+        cursor.execute(f"SELECT column_name FROM all_tab_columns WHERE table_name = '{nombre}'")
+        column_names = [row[0] for row in cursor.fetchall()]
 
         cursor.execute(f"SELECT COUNT(*) FROM {nombre}")
         cantidad = cursor.fetchone()
@@ -154,22 +157,33 @@ class App:
         else:
             data = cursor.fetchmany(1000)
             self.Ventanas[currentWindow].ui.contador.setText(f"Há {cantidad[0]} tuplas na tabela.")
-
         
         if data:
-            self.Ventanas[currentWindow].ui.tableWidget.setRowCount(len(data))
+            self.Ventanas[currentWindow].ui.tableWidget.setRowCount(len(data)+1)
             self.Ventanas[currentWindow].ui.tableWidget.setColumnCount(len(data[0]))
+            header_font = qtg.QFont('Arial', 10, qtg.QFont.Bold)
+            header_color = qtg.QColor(255, 255, 255)  # Color blanco
+            header_background = qtg.QColor(53, 92, 125)  # Color azul oscuro
 
+            # Agregar los títulos de las columnas con estilo
+            for col_idx, column_name in enumerate(column_names):
+                item = qtw.QTableWidgetItem(column_name)
+                item.setFont(header_font)
+                item.setForeground(header_color)
+                item.setBackground(header_background)
+                self.Ventanas[currentWindow].ui.tableWidget.setItem(0, col_idx, item)
             for row_idx, row_data in enumerate(data):
                 for col_idx, col_data in enumerate(row_data):
-                    self.Ventanas[currentWindow].ui.tableWidget.setItem(row_idx, col_idx, qtw.QTableWidgetItem(str(col_data)))
-
+                    self.Ventanas[currentWindow].ui.tableWidget.setItem(row_idx+1, col_idx, qtw.QTableWidgetItem(str(col_data)))
+        
+        self.adicionarLogs("Pesquisa na janela principal")
         
 
 # ---------------------------------
 
     def hideIfNotLider(self, currentWindow):
-        
+        self.Ventanas[currentWindow].ui.panelLiderFaccao.setTabEnabled(4,True)
+        self.Ventanas[currentWindow].ui.tabWidgetRelatorio.setTabEnabled(1,False)
         for i in range(0,4):
             self.Ventanas[currentWindow].ui.panelLiderFaccao.setTabEnabled(i,False)
         
@@ -189,47 +203,106 @@ class App:
         # Remover Faccao de Naccao
         self.Ventanas[currentWindow].ui.buttonRemoverFaccao.clicked.connect(lambda: self.__removerFaccaoNaccao(currentWindow))
         
-
-        
     def __alterarNome(self, currentWindow):
+        newNome = self.Ventanas[currentWindow].ui.textAlterarNome.text()
+        if newNome=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Novo Nome")
+            return
         cursor = self.connection.connection.cursor()
-        resultado = cursor.callproc("pacoteLiderf.update_nome_faccao", [self.usuario.CPI, self.Ventanas[currentWindow].ui.textAlterarNome.text()])
+        try:
+            resultado = cursor.callproc("pacoteLiderf.update_nome_faccao", [self.usuario.CPI, newNome])
+        except oracledb.Error as e:
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("Nome duplicado.")
+        
 
+        self.adicionarLogs("Alteração de nome da Facção")
         cursor.close()
 
+    def __safe_int_conversion(self,value):
+        if value == "":
+            return None  # o cualquier valor por defecto que prefieras, como 0
+        try:
+            return int(value)
+        except ValueError:
+            return None  # o manejar el error de otra manera
+
     def __credenciarComunidade(self, currentWindow):
+        
         especie = self.Ventanas[currentWindow].ui.textEspecieComunidade.text()
+        if especie=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Especie")
+            return
         comunidade = self.Ventanas[currentWindow].ui.textNomeComunidade.text()
-        quantidade = int(self.Ventanas[currentWindow].ui.textQuantidadeComunidade.text())
+        if comunidade=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Comunidade")
+            return
+        quantidade = self.__safe_int_conversion(self.Ventanas[currentWindow].ui.
+        textQuantidadeComunidade.text())
+        if quantidade==None:
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Quantidade")
+            return
         cpi = self.usuario.CPI
         planeta = self.Ventanas[currentWindow].ui.textPlanetaComunidade.text()
+        if planeta=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Planeta")
+            return
 
         cursor = self.connection.connection.cursor()
-        resultado = cursor.callproc("pacoteLiderf.inserir_nova_comunidade", [especie, comunidade, quantidade, cpi, planeta])
+        # NOTE : Aparentemente no se han espeficificado las excepciones en el sql
+        try:
+            resultado = cursor.callproc("pacoteLiderf.inserir_nova_comunidade", [especie, comunidade, quantidade, cpi, planeta])
+            print("Procedure ejecutado con:",especie, comunidade, quantidade, cpi, planeta)
+        except oracledb.Error as e:
+            errorObject,=e.args
+            print(errorObject.code)
+            if errorObject.code == 1:
+                currentWindow.popupMessage("Nome duplicado.")
 
+        self.adicionarLogs("Comunidade credenciada")
         cursor.close()
     
     def __novoLider(self, currentWindow):
-        
         # Creando cursor
+        cpiLider = self.Ventanas[currentWindow].ui.textNovoLider.text()
+        if cpiLider=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo CPI")
+            return
         cursor = self.connection.connection.cursor()
-        resultado = cursor.callproc("pacoteLiderf.actualizar_lider_por_cpi", [self.usuario.CPI, self.Ventanas[currentWindow].ui.textNovoLider.text()])
+        try:
+            resultado = cursor.callproc("pacoteLiderf.actualizar_lider_por_cpi", [self.usuario.CPI, ])
 
-        # Creando ventana emergente
-        self.Ventanas[currentWindow].popupMessage("Voce perdiou privilégios, voltando para o login.")
+            # Creando ventana emergente
+            self.Ventanas[currentWindow].popupMessage("Voce perdiou privilégios, voltando para o login.")
 
-        # Volviendo a login
-        self.Ventanas[currentWindow].close()
-        self.Ventanas[self.VentanasIndex.LOGIN.value].show()
+            # Volviendo a login
+            self.Ventanas[currentWindow].close()
+            self.Ventanas[self.VentanasIndex.LOGIN.value].show()
+        except oracledb.Error as e:
+            # NOTE : Aparentemente no se han espeficificado las excepciones en el sql
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("Nome duplicado.")
+
         
+        self.adicionarLogs("Definição de um novo lider")
         # Cerrando cursor
         cursor.close()
 
     def __removerFaccaoNaccao(self, currentWindow):
+
         cursor = self.connection.connection.cursor()
-        resultado = cursor.callproc("pacoteLiderf.remover_faccao_nacao", [self.usuario.CPI])
+        try:
+            resultado = cursor.callproc("pacoteLiderf.remover_faccao_nacao", [self.usuario.CPI])
+            self.Ventanas[currentWindow].popupMessage("Facção excluída com éxito.")
+        except oracledb.Error as e:
+            # NOTE : son necesarias excepciones de tipo de dato?
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("Nome duplicado.")
         
-        self.Ventanas[currentWindow].popupMessage("Facção excluída com éxito.")
+        self.adicionarLogs("Remoção de facção")
         cursor.close()
     
 
@@ -248,56 +321,540 @@ class App:
         # Excluir estrela
         self.Ventanas[currentWindow].ui.buttonExcluirEstrela.clicked.connect(lambda: self.__excluirEstrela(currentWindow))
 
+    def __safe_float_conversion(self,value):
+        if value == "":
+            return None  # o cualquier valor por defecto que prefieras, como 0
+        try:
+            return float(value)
+        except ValueError:
+            return None  # o manejar el error de otra manera
+
     def __inserirEstrela(self, currentWindow):
         idEstrela = self.Ventanas[currentWindow].ui.textIDEstrela.text()
         nomeEstrela = self.Ventanas[currentWindow].ui.textNomeEstrela.text()
         classificacaoEstrela = self.Ventanas[currentWindow].ui.textClassificacaoEstrela.text()
         massaEstrela = self.Ventanas[currentWindow].ui.textMassaEstrela.text()
-        coordX = float(self.Ventanas[currentWindow].ui.textCoordX.text())
-        coordY = float(self.Ventanas[currentWindow].ui.textCoordY.text())
-        coordZ = float(self.Ventanas[currentWindow].ui.textCoordZ.text())
-
+        coordX = self.__safe_float_conversion(self.Ventanas[currentWindow].ui.textCoordX.text())
+        coordY = self.__safe_float_conversion(self.Ventanas[currentWindow].ui.textCoordY.text())
+        coordZ = self.__safe_float_conversion(self.Ventanas[currentWindow].ui.textCoordZ.text())
+        if idEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo ID")
+            return
+        if nomeEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Nome")
+            return
+        if classificacaoEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Classificação")
+            return
+        if massaEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Massa")
+            return
+        if coordX==None:
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Coordenadas X")
+            return
+        if coordY==None:
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Coordenadas Y")
+            return
+        if coordZ==None:
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Coordenadas Z")
+            return
         cursor = self.connection.connection.cursor()
-        resultado = cursor.callproc("pacote_cientista.criar_estrela", [idEstrela, nomeEstrela, classificacaoEstrela, massaEstrela, coordX, coordY, coordZ])
-        
-        self.Ventanas[currentWindow].popupMessage("Estrela inserida com sucesso.")
+        try:
+            resultado = cursor.callproc("pacote_cientista.criar_estrela", [idEstrela, nomeEstrela, classificacaoEstrela, massaEstrela, coordX, coordY, coordZ])
+            
+            self.Ventanas[currentWindow].popupMessage("Estrela inserida com sucesso.")
+        except oracledb.Error as e:
+            # NOTE : ex_estrela_existente? sin codigo asignado
+            errorObject,=e.args
+            if errorObject.code == 2291:
+                currentWindow.popupMessage("Violação de integridade referencial.")
+        self.adicionarLogs("Inserção de estrela")
         cursor.close()
 
     def __pesquisarEstrela(self, currentWindow):
+
+        id_estrela = self.Ventanas[currentWindow].ui.textPesquisarEstrela.text()
+
+        if id_estrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor de identificação inválido para a pesquisa")
+            return
         cursor = self.connection.connection.cursor()
-        
-        nome = cursor.var(oracledb.STRING)
-        classificacao = cursor.var(oracledb.STRING)
-        massa = cursor.var(oracledb.NUMBER)
-        x = cursor.var(oracledb.NUMBER)
-        y = cursor.var(oracledb.NUMBER)
-        z = cursor.var(oracledb.NUMBER)
+        try:
+            nome = cursor.var(oracledb.STRING)
+            classificacao = cursor.var(oracledb.STRING)
+            massa = cursor.var(oracledb.NUMBER)
+            x = cursor.var(oracledb.NUMBER)
+            y = cursor.var(oracledb.NUMBER)
+            z = cursor.var(oracledb.NUMBER)
+            resultado = cursor.callproc("pacote_cientista.ler_estrela", [self.Ventanas[currentWindow].ui.textPesquisarEstrela.text(), nome, classificacao, massa, x, y, z])
 
-        resultado = cursor.callproc("pacote_cientista.ler_estrela", [self.Ventanas[currentWindow].ui.textPesquisarEstrela.text(), nome, classificacao, massa, x, y, z])
-        
-        self.Ventanas[currentWindow].ui.textResultadoPesquisa.setText(f"Nombre: {nome.getvalue()}  Classificação: {classificacao.getvalue()}  Massa: {massa.getvalue()} ")
+            self.Ventanas[currentWindow].ui.textResultadoPesquisa.setText(f"Nombre: {nome.getvalue()}  Classificação: {classificacao.getvalue()}  Massa: {massa.getvalue()} ")
 
-        self.Ventanas[currentWindow].ui.textResultadoPesquisa_2.setText(f"X: {x.getvalue()}  Y: {y.getvalue()}  Z: {z.getvalue()}")
+            self.Ventanas[currentWindow].ui.textResultadoPesquisa_2.setText(f"X: {x.getvalue()}  Y: {y.getvalue()}  Z: {z.getvalue()}")
+        except oracledb.Error as e:
+            # NOTE : Aparentemente no se han espeficificado las excepciones en el sql
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("Nome duplicado.")
+        self.adicionarLogs("Pesquisa de estrela")
+        cursor.close()
 
     def __atualizarEstrela(self, currentWindow):
         idEstrela = self.Ventanas[currentWindow].ui.textIDEstrelaAtualizar.text()
         nomeEstrela = self.Ventanas[currentWindow].ui.textNomeEstrelaAtualizar.text()
         classificacaoEstrela = self.Ventanas[currentWindow].ui.textClassificacaoEstrelaAtualizar.text()
-        massaEstrela = self.Ventanas[currentWindow].ui.textMassaEstrelaAtualizar.text()
-        coordX = float(self.Ventanas[currentWindow].ui.textCoordXAtualizar.text())
-        coordY = float(self.Ventanas[currentWindow].ui.textCoordYAtualizar.text())
-        coordZ = float(self.Ventanas[currentWindow].ui.textCoordZAtualizar.text())
-
+        massaEstrela = self.Ventanas[currentWindow].ui.textMassaEstrelaAtuailizar.text()
+        coordX = self.__safe_float_conversion(self.Ventanas[currentWindow].ui.textCoordXAtuailizar.text())
+        coordY = self.__safe_float_conversion(self.Ventanas[currentWindow].ui.textCoordYAtuailizar.text())
+        coordZ = self.__safe_float_conversion(self.Ventanas[currentWindow].ui.textCoordZAtuailizar.text())
+        if idEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo ID")
+            return
+        if nomeEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Nome")
+            return
+        if classificacaoEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Classificação")
+            return
+        if massaEstrela=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Massa")
+            return
+        if coordX==None:
+            self.Ventanas[currentWindow].popupMessage("°Valor inválido no campo Coordenadas X")
+            return
+        if coordY==None:
+            self.Ventanas[currentWindow].popupMessage("°Valor inválido no campo Coordenadas Y")
+            return
+        if coordZ==None:
+            self.Ventanas[currentWindow].popupMessage("°Valor inválido no campo Coordenadas Z")
+            return
         cursor = self.connection.connection.cursor()
-        resultado = cursor.callproc("pacote_cientista.actualizar_estrela", [idEstrela, nomeEstrela, classificacaoEstrela, massaEstrela, coordX, coordY, coordZ])
+        try:
+            resultado = cursor.callproc("pacote_cientista.actualizar_estrela", [idEstrela, nomeEstrela, classificacaoEstrela, massaEstrela, coordX, coordY, coordZ])
+        except oracledb.Error as e:
+            # NOTE : Aparentemente no se han espeficificado las excepciones en el sql
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("°Nombre duplicado.")
         
-        self.Ventanas[currentWindow].popupMessage("Estrela atualizada com sucesso.")
+        self.adicionarLogs("Atualização de estrela")
         cursor.close()
 
 
     def __excluirEstrela(self, currentWindow):
+        excluir_estrela = self.Ventanas[currentWindow].ui.textExcluirEstrela.text()
+        if excluir_estrela=="":
+            self.Ventanas[currentWindow].popupMessage("°Valor inválido en el campo Planeta")
+            return
         cursor = self.connection.connection.cursor()
-        cursor.callproc("pacote_cientista.excluir_estrela", [self.Ventanas[currentWindow].ui.textExcluirEstrela.text()])
         
-        self.Ventanas[currentWindow].popupMessage("Estrela excluida com sucesso.")
+        try:
+            cursor.callproc("pacote_cientista.excluir_estrela", [excluir_estrela])
+
+            self.Ventanas[currentWindow].popupMessage("Estrela excluida com sucesso.")
+        except oracledb.Error as e:
+            # NOTE : Aparentemente no se han espeficificado las excepciones en el sql
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("°Nombre duplicado.")
+
+        self.adicionarLogs("Exclusão de estrela")
+        cursor.close()
+
+    def funcionalidadComandante(self, currentWindow):
+        
+        # modificarFederacaoNacao
+        self.Ventanas[currentWindow].ui.buttonIncluirExcluirNacao.clicked.connect(lambda: self.__modificarFederacaoNacao(currentWindow))
+
+        # criar_federacao
+        self.Ventanas[currentWindow].ui.buttonCriarFederacao.clicked.connect(lambda: self.__criarFederacao(currentWindow))
+        
+
+        # insertar_dominancia
+        self.Ventanas[currentWindow].ui.buttonInserirDominancia.clicked.connect(lambda: self.__insertarDominancia(currentWindow))
+
+        self.Ventanas[currentWindow].ui.tabWidgetRelatorio.setTabEnabled(0,False)
+        
+        
+
+
+    def __criarFederacao(self, currentWindow):
+
+        nomeFederacao = self.Ventanas[currentWindow].ui.textCriarNomeFederacao.text()
+        if nomeFederacao=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Federação.")
+            return
+
+        try:
+            cursor = self.connection.connection.cursor()
+            cursor.callproc("pacote_comandante.criar_federacao", [self.Ventanas[currentWindow].ui.textNomeFederacao.text(), self.usuario.CPI])
+
+        # EXCEPCIONES
+        except oracledb.Error as e:
+            errorObject,=e.args
+            print("Erro no banco de dados")
+
+        self.adicionarLogs("Criação de Federação")
+        cursor.close()
+        
+    def __modificarFederacaoNacao(self, currentWindow):
+        
+        nomeFederacao = self.Ventanas[currentWindow].ui.textNomeFederacao.text()
+        incluir = nomeFederacao = self.Ventanas[currentWindow].ui.radioButtonIncluir
+        excluir = nomeFederacao = self.Ventanas[currentWindow].ui.radioButtonExcluir
+        
+        if nomeFederacao=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Federação.")
+            return
+        if incluir.isChecked() == False and excluir.isChecked() == False:
+            self.Ventanas[currentWindow].popupMessage("Não seleito nenhuma opção.")
+            return
+
+        if incluir.isChecked():
+            parametro = "INCLUIR"
+        if excluir.isChecked():
+            parametro = "EXCLUIR"
+
+        try:
+            cursor = self.connection.connection.cursor()
+            cursor.callproc("pacote_comandante.modificar_federacao_nacao", [self.usuario.CPI, self.Ventanas[currentWindow].ui.textNomeFederacao.text(), parametro])
+            self.Ventanas[currentWindow].popupMessage("A operação foi feita.")
+            if incluir.isChecked():
+                self.adicionarLogs("Inclução a Federação")
+            
+            if excluir.isChecked():
+                self.adicionarLogs("Exclução a Federação")
+
+        # EXCEPCIONES
+        except oracledb.Error as e:
+            errorObject,=e.args
+            print("Erro no banco de dados")
+
+    
+    
+    def __insertarDominancia(self, currentWindow):
+        campoPlaneta = self.Ventanas[currentWindow].ui.textNomePlanetaDominancia.text()
+        campoDataInicio = self.Ventanas[currentWindow].ui.dateEditDataInicioDominancia.text()
+        campoDataFim = self.Ventanas[currentWindow].ui.dateEditDataFimDominancia.text()
+        if campoPlaneta=="":
+            self.Ventanas[currentWindow].popupMessage("Valor inválido no campo Planeta.")
+            return
+        
+        try:
+
+            cursor = self.connection.connection.cursor()
+                
+            self.recuperarFecha(currentWindow, self.Ventanas[currentWindow].ui.dateEditDataInicioDominancia)
+            fecha1 = self.fecha 
+
+            self.recuperarFecha(currentWindow, self.Ventanas[currentWindow].ui.dateEditDataFimDominancia)
+            fecha2 = self.fecha 
+
+            cursor.callproc("pacote_comandante.insertar_dominancia", [self.usuario.CPI, self.Ventanas[currentWindow].ui.textNomePlanetaDominancia.text(),fecha1, fecha2])
+
+            self.Ventanas[currentWindow].popupMessage("A dominancia foi inserida.")
+
+            self.adicionarLogs("Inserção da dominancia")
+
+        except oracledb.Error as e:
+            errorObject,=e.args
+            print("Erro no banco de dados")
+
+        cursor.close()
+    def recuperarFecha(self, currentWindow, currentField):
+            dato = ""
+            fechaSeparada = []
+            dt = currentField.dateTime()
+            dt_string = dt.toString(self.Ventanas[currentWindow].ui.dateEditDataInicioDominancia.displayFormat())
+            
+            for i in dt_string:
+                dato += i
+                if (i == "/"):
+                    dato = dato.replace("/", "")
+                    fechaSeparada.append(dato)
+                    dato = ""
+            fechaSeparada.append(dato)
+
+            self.fecha = datetime(int(fechaSeparada[2]),int(fechaSeparada[1]), int(fechaSeparada[0]))
+
+    def inicializarRelatorioLiderFaccao(self, currentWindow):
+        self.Ventanas[currentWindow].ui.buttonGerarLider.clicked.connect(lambda: self.gerarRelatorioLiderFaccao(currentWindow))
+        
+    def gerarRelatorioLiderFaccao(self, currentWindow):
+        self.Ventanas[currentWindow].ui.tableRelatorio.clear()
+        opcion = None
+        currentTab = self.Ventanas[currentWindow].ui.tabWidgetRelatorio.currentIndex()
+        try:
+                
+            nacao = self.Ventanas[currentWindow].ui.radioButtonRelatorioNacao
+            especie = self.Ventanas[currentWindow].ui.radioButtonRelatorioEspecie
+            planeta =  self.Ventanas[currentWindow].ui.radioButtonRelatorioPlaneta
+            sistema = self.Ventanas[currentWindow].ui.radioButtonRelatorioSistema
+
+            cursor = self.connection.connection.cursor()
+
+            typeObject = self.connection.connection.gettype("RESULT_TABLE_LIDER")
+            tipo = cursor.var(typeObject)
+
+            if nacao.isChecked() == False and especie.isChecked() == False and planeta.isChecked() == False and sistema.isChecked() == False and currentTab == 1:
+                self.Ventanas[currentWindow].popupMessage("Não seleito nenhuma opção.")
+
+            if nacao.isChecked() and currentTab == 1:
+                opcion = "NACAO"
+            if especie.isChecked() and currentTab == 1:
+                opcion = "ESPECIE"
+            if planeta.isChecked() and currentTab == 1:
+                opcion = "PLANETA"
+            if sistema.isChecked() and currentTab == 1:
+                opcion = "SISTEMA"
+            
+            self.relatorio = cursor.callproc("RELA_LIDER", [self.usuario.CPI, opcion, tipo])
+
+            # Obtener los nombres de las columnas
+            #cursor.execute(f"SELECT COUNT(*) FROM {opcion}")
+
+            # asd = cursor.execute("SELECT * FROM RESULT_TABLE_LIDER")
+            
+            # for i in asd:
+                # print(i)
+            #hola = self.relatorio[2]
+            ListaRelatorio = self.relatorio[2].aslist()
+
+            resultados = []
+            column_names = []
+            
+            for obj in ListaRelatorio:
+                fila = {}
+                for attr in obj.type.attributes:
+                    valor = getattr(obj, attr.name)
+                    fila[attr.name] = valor
+                resultados.append(fila)
+            
+            # Limpiar diccionario de resultados
+            
+            
+            for i,diccionario in enumerate(resultados):
+                temp_diccionario = diccionario.copy()
+                for clave, valor in temp_diccionario.items():
+                    if valor == None:
+                        del(resultados[i][clave])
+            
+            for clave in resultados[0].keys():
+                column_names.append(clave)
+            
+            
+            # Imprimir los resultados para verlos
+            if resultados:
+                #List Comprehension
+                """
+                    otraLista = [1,2,3,4,5]
+
+                    lista = [str(elemento) for elemento in otraLista] = []
+                    list(fila.values())
+                    fila = 
+                    {
+                        clave1 : valor1
+                        calve2 : valor2
+                    }
+                """
+                data = [list(fila.values()) for fila in resultados]
+                        
+                self.Ventanas[currentWindow].ui.tableRelatorio.setRowCount(len(data)+1)
+                self.Ventanas[currentWindow].ui.tableRelatorio.setColumnCount(len(data[0]))
+
+                header_font = qtg.QFont('Arial', 10, qtg.QFont.Bold)
+                header_color = qtg.QColor(255, 255, 255)  # Color blanco
+                header_background = qtg.QColor(53, 92, 125)  # Color azul oscuro
+
+                # Agregar los títulos de las columnas con estilo
+                for col_idx, column_name in enumerate(column_names):
+                    item = qtw.QTableWidgetItem(column_name)
+                    item.setFont(header_font)
+                    item.setForeground(header_color)
+                    item.setBackground(header_background)
+                    self.Ventanas[currentWindow].ui.tableRelatorio.setItem(0, col_idx, item)
+
+                # Agregar los datos a la tabla
+                for row_idx, row_data in enumerate(data):
+                    for col_idx, col_data in enumerate(row_data):
+                        self.Ventanas[currentWindow].ui.tableRelatorio.setItem(row_idx + 1, col_idx, qtw.QTableWidgetItem(str(col_data)))
+        
+            self.adicionarLogs("Geração do relatorio de Lider de Facção")
+        
+        except oracledb.Error as e:
+            errorObject,=e.args
+            if errorObject.code == 20099:
+                self.Ventanas[currentWindow].popupMessage("Nenhum dado encontrado para os critérios fornecidos.")
+        cursor.close()
+
+    def __inicializarRelatorioOficial(self, currentWindow):
+        self.Ventanas[currentWindow].ui.buttonGerarOficial.clicked.connect(lambda: self.gerarRelatorioOficial(currentWindow))
+        pass
+
+    def gerarRelatorioOficial(self, currentWindow):
+        self.Ventanas[currentWindow].ui.tableRelatorio.clear()
+        
+        opcion = None
+        currentTab = self.Ventanas[currentWindow].ui.tabWidgetRelatorio.currentIndex()
+        try:
+                
+            faccao = self.Ventanas[currentWindow].ui.radioButtonRelatorioFaccaoOficial
+            especie = self.Ventanas[currentWindow].ui.radioButtonRelatorioEspecieOficial
+            planeta =  self.Ventanas[currentWindow].ui.radioButtonRelatorioPlanetaOficial
+            sistema = self.Ventanas[currentWindow].ui.radioButtonRelatorioSistemaOficial
+
+            cursor = self.connection.connection.cursor()
+
+            typeObject = self.connection.connection.gettype("RESULT_TABLE_OFICIAL")
+            tipo = cursor.var(typeObject)
+
+            if faccao.isChecked() == False and especie.isChecked() == False and planeta.isChecked() == False and sistema.isChecked() == False and currentTab == 0:
+                self.Ventanas[currentWindow].popupMessage("Não seleito nenhuma opção.")
+
+            if faccao.isChecked() and currentTab == 0:
+                opcion = "FACCAO"
+            if especie.isChecked() and currentTab == 0:
+                opcion = "ESPECIE"
+            if planeta.isChecked() and currentTab == 0:
+                opcion = "PLANETA"
+            if sistema.isChecked() and currentTab == 0:
+                opcion = "SISTEMA"
+            
+            self.relatorio = cursor.callproc("RELA_OFICIAL", [self.usuario.CPI, opcion, tipo])
+
+            ListaRelatorio = self.relatorio[2].aslist()
+
+            resultados = []
+            column_names = []
+            
+            for obj in ListaRelatorio:
+                fila = {}
+                for attr in obj.type.attributes:
+                    valor = getattr(obj, attr.name)
+                    fila[attr.name] = valor
+                resultados.append(fila)
+            
+            # Limpiar diccionario de resultados
+            
+            for i,diccionario in enumerate(resultados):
+                temp_diccionario = diccionario.copy()
+                for clave, valor in temp_diccionario.items():
+                    if valor == None:
+                        del(resultados[i][clave])
+            
+            for clave in resultados[0].keys():
+                column_names.append(clave)
+            
+            
+            # Imprimir los resultados para verlos
+            if resultados:
+
+                data = [list(fila.values()) for fila in resultados]
+                        
+                self.Ventanas[currentWindow].ui.tableRelatorio.setRowCount(len(data)+1)
+                self.Ventanas[currentWindow].ui.tableRelatorio.setColumnCount(len(data[0]))
+
+                header_font = qtg.QFont('Arial', 10, qtg.QFont.Bold)
+                header_color = qtg.QColor(255, 255, 255)  # Color blanco
+                header_background = qtg.QColor(53, 92, 125)  # Color azul oscuro
+
+                # Agregar los títulos de las columnas con estilo
+                for col_idx, column_name in enumerate(column_names):
+                    item = qtw.QTableWidgetItem(column_name)
+                    item.setFont(header_font)
+                    item.setForeground(header_color)
+                    item.setBackground(header_background)
+                    self.Ventanas[currentWindow].ui.tableRelatorio.setItem(0, col_idx, item)
+
+                # Agregar los datos a la tabla
+                for row_idx, row_data in enumerate(data):
+                    for col_idx, col_data in enumerate(row_data):
+                        self.Ventanas[currentWindow].ui.tableRelatorio.setItem(row_idx + 1, col_idx, qtw.QTableWidgetItem(str(col_data)))
+            self.adicionarLogs("Geração do relatorio de Oficial")
+        except oracledb.Error as e:
+            errorObject,=e.args
+            if errorObject.code == 20098:
+                self.Ventanas[currentWindow].popupMessage("Nenhum dado encontrado para os critérios fornecidos.")
+        cursor.close()
+
+
+    def __inicializarRelatorioCientista(self, currentWindow):
+        self.Ventanas[currentWindow].ui.buttonGerarCientista.clicked.connect(lambda: self.gerarRelatorioCientista(currentWindow))
+
+
+    def gerarRelatorioCientista(self, currentWindow):
+        self.Ventanas[currentWindow].ui.tableRelatorio.clear()
+        
+       
+        opcion = None
+        currentTab = self.Ventanas[currentWindow].ui.tabWidgetRelatorio.currentIndex()
+        
+        try:
+            estrela = self.Ventanas[currentWindow].ui.textEstrelaCentral.text()
+            distanciaMinima = self.Ventanas[currentWindow].ui.textDistanciaMinima.text()
+            distanciaMaxima =  self.Ventanas[currentWindow].ui.textDistanciaMaxima.text()
+
+            cursor = self.connection.connection.cursor()
+
+            typeObject = self.connection.connection.gettype("ESTRELAPLANETADATATABLE")
+            tipo = cursor.var(typeObject)
+
+            if estrela == "" and distanciaMinima == "" and distanciaMaxima == "" and currentTab == 0:
+                self.Ventanas[currentWindow].popupMessage("Não preencheu todos os campos.")
+                return
+
+            
+            self.relatorio = cursor.callfunc("pacote_cientista.obtener_sistemas_planetas_en_intervalo", typeObject, [estrela, float(distanciaMinima), float(distanciaMaxima)])
+
+            ListaRelatorio = self.relatorio.aslist()
+            resultados = []
+            column_names = []
+            
+            for obj in ListaRelatorio:
+                fila = {}
+                for attr in obj.type.attributes:
+                    valor = getattr(obj, attr.name)
+                    fila[attr.name] = valor
+                resultados.append(fila)
+            
+            # Limpiar diccionario de resultados
+            
+            for i,diccionario in enumerate(resultados):
+                temp_diccionario = diccionario.copy()
+                for clave, valor in temp_diccionario.items():
+                    if valor == None:
+                        del(resultados[i][clave])
+            
+            for clave in resultados[0].keys():
+                column_names.append(clave)
+            
+            
+            # Imprimir los resultados para verlos
+            if resultados:
+
+                data = [list(fila.values()) for fila in resultados]
+                        
+                self.Ventanas[currentWindow].ui.tableRelatorio.setRowCount(len(data)+1)
+                self.Ventanas[currentWindow].ui.tableRelatorio.setColumnCount(len(data[0]))
+
+                header_font = qtg.QFont('Arial', 10, qtg.QFont.Bold)
+                header_color = qtg.QColor(255, 255, 255)  # Color blanco
+                header_background = qtg.QColor(53, 92, 125)  # Color azul oscuro
+
+                # Agregar los títulos de las columnas con estilo
+                for col_idx, column_name in enumerate(column_names):
+                    item = qtw.QTableWidgetItem(column_name)
+                    item.setFont(header_font)
+                    item.setForeground(header_color)
+                    item.setBackground(header_background)
+                    self.Ventanas[currentWindow].ui.tableRelatorio.setItem(0, col_idx, item)
+
+                # Agregar los datos a la tabla
+                for row_idx, row_data in enumerate(data):
+                    for col_idx, col_data in enumerate(row_data):
+                        self.Ventanas[currentWindow].ui.tableRelatorio.setItem(row_idx + 1, col_idx, qtw.QTableWidgetItem(str(col_data)))
+        except oracledb.Error as e:
+            errorObject,=e.args
+            if errorObject.code == 1:
+                currentWindow.popupMessage("Erro ao gerar o relatório.")      
         cursor.close()

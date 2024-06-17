@@ -20,7 +20,7 @@ class DataBaseConnection:
 
         except oracledb.DatabaseError as e:
             error, = e.args
-            print("Error al conectar a la base de datos:", error.code)
+            print("Erro ao conectar ao banco de datos:", error.code)
             print(error.message)
 
     def close_connection(self):

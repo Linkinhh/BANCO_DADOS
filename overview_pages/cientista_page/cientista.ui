@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>CIENTISTA</string>
   </property>
   <widget class="QTabWidget" name="oficialTab">
    <property name="geometry">
@@ -29,7 +29,7 @@
     <attribute name="title">
      <string>NOME_DO_CARGO</string>
     </attribute>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="panelLiderFaccao">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -39,7 +39,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_7">
       <attribute name="title">
@@ -361,7 +361,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_21">
       <attribute name="title">
@@ -900,6 +900,218 @@
     <attribute name="title">
      <string>RELATÓRIOS</string>
     </attribute>
+    <widget class="QTableWidget" name="tableRelatorio">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>170</y>
+       <width>1021</width>
+       <height>591</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidgetRelatorio">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>1021</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab_24">
+      <attribute name="title">
+       <string>Cientista</string>
+      </attribute>
+      <widget class="QPushButton" name="buttonGerarCientista">
+       <property name="geometry">
+        <rect>
+         <x>920</x>
+         <y>50</y>
+         <width>89</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>GERAR</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_7">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>281</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 18pt &quot;Ubuntu&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Gerar relatório seguindo:</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textEstrelaCentral">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_20">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>141</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ID da estrela central</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textDistanciaMinima">
+       <property name="geometry">
+        <rect>
+         <x>450</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_21">
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>60</y>
+         <width>141</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Distância mínima</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="textDistanciaMaxima">
+       <property name="geometry">
+        <rect>
+         <x>740</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_22">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>60</y>
+         <width>121</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Distância máxima</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_25">
+      <attribute name="title">
+       <string>Lider de Facção</string>
+      </attribute>
+      <widget class="QPushButton" name="buttonGerarLider">
+       <property name="geometry">
+        <rect>
+         <x>920</x>
+         <y>50</y>
+         <width>89</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>GERAR</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioEspecie">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>50</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Especie</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioNacao">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>112</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Nação</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>281</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 18pt &quot;Ubuntu&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Gerar relatório seguindo:</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioPlaneta">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>50</y>
+         <width>71</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Planeta</string>
+       </property>
+      </widget>
+      <widget class="QRadioButton" name="radioButtonRelatorioSistema">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>50</y>
+         <width>81</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Sistema</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>
